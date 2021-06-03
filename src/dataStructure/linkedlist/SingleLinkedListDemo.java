@@ -22,9 +22,13 @@ public class SingleLinkedListDemo {
         System.out.println("删除后:");
         singleLinkedList.delete(1);
         singleLinkedList.delete(4);
-        singleLinkedList.delete(3);
-        singleLinkedList.delete(2);
+        /*singleLinkedList.delete(3);
+        singleLinkedList.delete(2);*/
         singleLinkedList.showList();
+
+        System.out.println("当前有效节点数量："+ SingleLinkedList.getNodeNumber(singleLinkedList.getHead()));
+        HeroNode cur=SingleLinkedList.findLastIndexNode(singleLinkedList.getHead(),1);
+        System.out.println("当前倒数第index个节点为"+cur);
     }
 }
 
@@ -32,6 +36,10 @@ public class SingleLinkedListDemo {
 class SingleLinkedList {
     //initial a head node, head node can not move and store other data
     private HeroNode head = new HeroNode(0, "", "");
+
+    public HeroNode getHead() {
+        return head;
+    }
 
     //add a node to the end of this linked list
     public void add(HeroNode heroNode) {
@@ -134,6 +142,44 @@ class SingleLinkedList {
             System.out.println(temp);
             temp = temp.next;
         }
+    }
+    //count effective node number
+    /*
+    *
+    * @param head of linked list
+    * @return node number
+    */
+    public static int getNodeNumber(HeroNode head){
+        if(head.next==null){
+            return 0;
+        }
+        int length=0;//store length of list
+        HeroNode temp=head.next;
+        while(temp != null){
+            length++;
+            temp=temp.next;
+        }
+        return length;
+    }
+    //获取倒数第index个节点
+    /*
+    *
+    * @param head of node & index
+    * @return an object of HeroNode
+    */
+    public static HeroNode findLastIndexNode(HeroNode head, int index){
+        if(head.next==null){
+            return null;
+        }
+        int size=getNodeNumber(head);//获取有效节点数量
+        if(index<=0||index>size){//index invalid
+            return null;
+        }
+        HeroNode temp=head.next;
+        for(int cur=0; cur<size-index; cur++){
+            temp=temp.next;
+        }
+        return temp;
     }
 }
 
