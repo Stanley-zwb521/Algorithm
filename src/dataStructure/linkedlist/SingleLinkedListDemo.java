@@ -15,6 +15,11 @@ public class SingleLinkedListDemo {
         singleLinkedList.addInSeq(hero2);
         singleLinkedList.addInSeq(hero3);
         singleLinkedList.showList();
+        System.out.println("链表反转后:");
+        SingleLinkedList.reverseList(singleLinkedList.getHead());
+        singleLinkedList.showList();
+        //singleLinkedList.reverseListRecursion(singleLinkedList.getHead());
+        //singleLinkedList.showList();
         System.out.println("修改后:");
         HeroNode newHeroNode = new HeroNode(2, "小鲁", "花和尚");
         singleLinkedList.update(newHeroNode);
@@ -180,6 +185,39 @@ class SingleLinkedList {
             temp=temp.next;
         }
         return temp;
+    }
+    //将链表反转(头插法)
+    /*
+    *
+    * @param head of node
+    * @return
+    */
+    public static void reverseList(HeroNode head){
+        if(head.next==null||head.next.next==null){
+            return;
+        }
+        HeroNode cur=head.next;
+        HeroNode next = null;
+        HeroNode reverseHead = new HeroNode(0,"","");//创建一个反转头
+        while(cur!=null){
+            next=cur.next;//先暂时保存当前节点的下一个节点
+            cur.next=reverseHead.next;//将cur的下一个节点指向新的链表的最前端
+            reverseHead.next=cur;//将当前数据插入到reverse头部后面
+            cur=next;//cur后移
+        }
+        head.next=reverseHead.next;
+    }
+    //将链表反转(递归法)
+    public static HeroNode reverseListRecursion(HeroNode head){
+        if(head.next==null||head.next.next==null){
+            return head.next;
+        }
+        HeroNode cur=head.next;
+        head=cur;
+        HeroNode newHead=reverseListRecursion(head.next);
+        head.next.next=head;
+        head.next=null;
+        return newHead;
     }
 }
 
