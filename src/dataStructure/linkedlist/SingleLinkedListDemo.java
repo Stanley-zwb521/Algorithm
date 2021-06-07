@@ -18,8 +18,7 @@ public class SingleLinkedListDemo {
         System.out.println("链表反转后:");
         SingleLinkedList.reverseList(singleLinkedList.getHead());
         singleLinkedList.showList();
-        //singleLinkedList.reverseListRecursion(singleLinkedList.getHead());
-        //singleLinkedList.showList();
+        //SingleLinkedList.reverseListRecursion(singleLinkedList.getHead());
         System.out.println("修改后:");
         HeroNode newHeroNode = new HeroNode(2, "小鲁", "花和尚");
         singleLinkedList.update(newHeroNode);
@@ -207,13 +206,11 @@ class SingleLinkedList {
         }
         head.next=reverseHead.next;
     }
-    //将链表反转(递归法)
+    //将链表反转(递归法)在没有head的情况下可以采用该方法
     public static HeroNode reverseListRecursion(HeroNode head){
         if(head.next==null||head.next.next==null){
             return head.next;
         }
-        HeroNode cur=head.next;
-        head=cur;
         HeroNode newHead=reverseListRecursion(head.next);
         head.next.next=head;
         head.next=null;
