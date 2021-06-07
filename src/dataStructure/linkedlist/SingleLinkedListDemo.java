@@ -30,9 +30,9 @@ public class SingleLinkedListDemo {
         singleLinkedList.delete(2);*/
         singleLinkedList.showList();
 
-        System.out.println("当前有效节点数量："+ SingleLinkedList.getNodeNumber(singleLinkedList.getHead()));
-        HeroNode cur=SingleLinkedList.findLastIndexNode(singleLinkedList.getHead(),1);
-        System.out.println("当前倒数第index个节点为"+cur);
+        System.out.println("当前有效节点数量：" + SingleLinkedList.getNodeNumber(singleLinkedList.getHead()));
+        HeroNode cur = SingleLinkedList.findLastIndexNode(singleLinkedList.getHead(), 1);
+        System.out.println("当前倒数第index个节点为" + cur);
     }
 }
 
@@ -147,73 +147,77 @@ class SingleLinkedList {
             temp = temp.next;
         }
     }
+
     //count effective node number
     /*
-    *
-    * @param head of linked list
-    * @return node number
-    */
-    public static int getNodeNumber(HeroNode head){
-        if(head.next==null){
+     *
+     * @param head of linked list
+     * @return node number
+     */
+    public static int getNodeNumber(HeroNode head) {
+        if (head.next == null) {
             return 0;
         }
-        int length=0;//store length of list
-        HeroNode temp=head.next;
-        while(temp != null){
+        int length = 0;//store length of list
+        HeroNode temp = head.next;
+        while (temp != null) {
             length++;
-            temp=temp.next;
+            temp = temp.next;
         }
         return length;
     }
+
     //获取倒数第index个节点
     /*
-    *
-    * @param head of node & index
-    * @return an object of HeroNode
-    */
-    public static HeroNode findLastIndexNode(HeroNode head, int index){
-        if(head.next==null){
+     *
+     * @param head of node & index
+     * @return an object of HeroNode
+     */
+    public static HeroNode findLastIndexNode(HeroNode head, int index) {
+        if (head.next == null) {
             return null;
         }
-        int size=getNodeNumber(head);//获取有效节点数量
-        if(index<=0||index>size){//index invalid
+        int size = getNodeNumber(head);//获取有效节点数量
+        if (index <= 0 || index > size) {//index invalid
             return null;
         }
-        HeroNode temp=head.next;
-        for(int cur=0; cur<size-index; cur++){
-            temp=temp.next;
+        HeroNode temp = head.next;
+        for (int cur = 0; cur < size - index; cur++) {
+            temp = temp.next;
         }
         return temp;
     }
+
     //将链表反转(头插法)
     /*
-    *
-    * @param head of node
-    * @return
-    */
-    public static void reverseList(HeroNode head){
-        if(head.next==null||head.next.next==null){
+     *
+     * @param head of node
+     * @return
+     */
+    public static void reverseList(HeroNode head) {
+        if (head.next == null || head.next.next == null) {
             return;
         }
-        HeroNode cur=head.next;
+        HeroNode cur = head.next;
         HeroNode next = null;
-        HeroNode reverseHead = new HeroNode(0,"","");//创建一个反转头
-        while(cur!=null){
-            next=cur.next;//先暂时保存当前节点的下一个节点
-            cur.next=reverseHead.next;//将cur的下一个节点指向新的链表的最前端
-            reverseHead.next=cur;//将当前数据插入到reverse头部后面
-            cur=next;//cur后移
+        HeroNode reverseHead = new HeroNode(0, "", "");//创建一个反转头
+        while (cur != null) {
+            next = cur.next;//先暂时保存当前节点的下一个节点
+            cur.next = reverseHead.next;//将cur的下一个节点指向新的链表的最前端
+            reverseHead.next = cur;//将当前数据插入到reverse头部后面
+            cur = next;//cur后移
         }
-        head.next=reverseHead.next;
+        head.next = reverseHead.next;
     }
+
     //将链表反转(递归法)在没有head的情况下可以采用该方法
-    public static HeroNode reverseListRecursion(HeroNode head){
-        if(head.next==null||head.next.next==null){
+    public static HeroNode reverseListRecursion(HeroNode head) {
+        if (head.next == null || head.next.next == null) {
             return head.next;
         }
-        HeroNode newHead=reverseListRecursion(head.next);
-        head.next.next=head;
-        head.next=null;
+        HeroNode newHead = reverseListRecursion(head.next);
+        head.next.next = head;
+        head.next = null;
         return newHead;
     }
 }
