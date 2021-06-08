@@ -1,5 +1,7 @@
 package dataStructure.linkedlist;
 
+import java.util.Stack;
+
 public class SingleLinkedListDemo {
     public static void main(String[] args) {
         System.out.println("测试单链表");
@@ -15,10 +17,11 @@ public class SingleLinkedListDemo {
         singleLinkedList.addInSeq(hero2);
         singleLinkedList.addInSeq(hero3);
         singleLinkedList.showList();
+        System.out.println("链表逆序打印:");
+        SingleLinkedList.reversePrint(singleLinkedList.getHead());
         System.out.println("链表反转后:");
         SingleLinkedList.reverseList(singleLinkedList.getHead());
         singleLinkedList.showList();
-        //SingleLinkedList.reverseListRecursion(singleLinkedList.getHead());
         System.out.println("修改后:");
         HeroNode newHeroNode = new HeroNode(2, "小鲁", "花和尚");
         singleLinkedList.update(newHeroNode);
@@ -145,6 +148,23 @@ class SingleLinkedList {
             }
             System.out.println(temp);
             temp = temp.next;
+        }
+    }
+
+    //使用栈这个数据结构,将各个节点压入到栈中,然后利用栈的先进后出原则实现倒序打印的效果
+    public static void reversePrint(HeroNode head) {
+        if (head.next == null) {
+            System.out.println("this linked list is empty, can not print reversal");
+            return;
+        }
+        Stack<HeroNode> stack = new Stack<>();
+        HeroNode cur = head.next;
+        while (cur != null) {
+            stack.push(cur);//也可以采用stack.add(cur);
+            cur = cur.next;
+        }
+        while (stack.size() > 0) {
+            System.out.println(stack.pop());
         }
     }
 
