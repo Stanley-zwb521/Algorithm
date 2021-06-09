@@ -1,7 +1,7 @@
 package dataStructure.linkedlist;
 
 public class DoubleLinkedListDemo {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println("双向链表测试:");
         HeroNode2 hero1 = new HeroNode2(1, "宋江", "及时雨");
         HeroNode2 hero2 = new HeroNode2(2, "鲁智深", "爱喝酒");
@@ -14,12 +14,12 @@ public class DoubleLinkedListDemo {
         doubleLinkedList.add(hero3);
         doubleLinkedList.add(hero4);
         doubleLinkedList.showList();
-        //update
-        HeroNode2 newHeroNode = new HeroNode2(4,"公孙胜","入云龙");
+        //修改
+        HeroNode2 newHeroNode = new HeroNode2(4, "公孙胜", "入云龙");
         doubleLinkedList.update(newHeroNode);
         System.out.println("修改后的链表情况:");
         doubleLinkedList.showList();
-
+        //删除
         doubleLinkedList.delete(3);
         doubleLinkedList.delete(4);
         System.out.println("删除后的链表情况:");
@@ -27,9 +27,10 @@ public class DoubleLinkedListDemo {
 
     }
 }
+
 //创建一个双向链表的类
-class DoubleLinkedList{
-    private HeroNode2 head=new HeroNode2(0,"","");
+class DoubleLinkedList {
+    private HeroNode2 head = new HeroNode2(0, "", "");
 
     public HeroNode2 getHead() {
         return head;
@@ -63,7 +64,7 @@ class DoubleLinkedList{
         }
         //形成一个双向链表
         temp.next = heroNode;
-        heroNode.pre=temp;
+        heroNode.pre = temp;
     }
 
     //双向链表的修改和单向链表一致,只不过类型发生改变
@@ -96,7 +97,7 @@ class DoubleLinkedList{
     //对于双向链表,我们可以直接找到要删除的节点,不需要找到前一个节点
     //找到后自我删除即可
     public void delete(int no) {
-        if(head.next==null){
+        if (head.next == null) {
             System.out.println("链表为空，不能删除");
             return;
         }
@@ -115,7 +116,7 @@ class DoubleLinkedList{
         if (flag) {
             //双向链表删除方式
             temp.pre.next = temp.next;
-            if(temp.next!=null){//防止删除最后一个节点导致空指针异常
+            if (temp.next != null) {//防止删除最后一个节点导致空指针异常
                 temp.next.pre = temp.pre;
             }
         } else {
@@ -124,6 +125,7 @@ class DoubleLinkedList{
     }
 
 }
+
 //define a node, each node is a node region
 class HeroNode2 {
     public int no;
