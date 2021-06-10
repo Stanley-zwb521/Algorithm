@@ -67,7 +67,7 @@ class DoubleLinkedList {
         heroNode.pre = temp;
     }
 
-    //add node to double linked list by correct order
+    //add node to double linked list in correct sequence
     public void addInSeq(HeroNode2 heroNode) {
         HeroNode2 temp = head;
         while (true) {
