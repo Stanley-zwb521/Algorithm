@@ -76,7 +76,7 @@ class DoubleLinkedList {
                 heroNode.pre = temp;
                 break;
             }
-            if (temp.next.no == temp.no) {
+            if (temp.next.no == heroNode.no) {
                 System.out.printf("待插入的英雄编号 %d 已经存在，不能加入\n", heroNode.no);
                 break;
             }
