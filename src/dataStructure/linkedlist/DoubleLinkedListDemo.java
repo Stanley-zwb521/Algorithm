@@ -9,10 +9,10 @@ public class DoubleLinkedListDemo {
         HeroNode2 hero4 = new HeroNode2(4, "林冲", "豹子头");
         //创建一个双向链表对象
         DoubleLinkedList doubleLinkedList = new DoubleLinkedList();
-        doubleLinkedList.add(hero1);
-        doubleLinkedList.add(hero2);
-        doubleLinkedList.add(hero3);
-        doubleLinkedList.add(hero4);
+        doubleLinkedList.addInSeq(hero1);
+        doubleLinkedList.addInSeq(hero4);
+        doubleLinkedList.addInSeq(hero2);
+        doubleLinkedList.addInSeq(hero3);
         doubleLinkedList.showList();
         //修改
         HeroNode2 newHeroNode = new HeroNode2(4, "公孙胜", "入云龙");
@@ -65,6 +65,30 @@ class DoubleLinkedList {
         //形成一个双向链表
         temp.next = heroNode;
         heroNode.pre = temp;
+    }
+
+    //add node to double linked list by correct order
+    public void addInSeq(HeroNode2 heroNode) {
+        HeroNode2 temp = head;
+        while (true) {
+            if (temp.next == null) {//在尾部插入
+                temp.next = heroNode;
+                heroNode.pre = temp;
+                break;
+            }
+            if (temp.next.no == temp.no) {
+                System.out.printf("待插入的英雄编号 %d 已经存在，不能加入\n", heroNode.no);
+                break;
+            }
+            if (temp.next.no > heroNode.no) {//位置找到了,在temp后面插入
+                heroNode.next = temp.next;
+                temp.next.pre = heroNode;
+                temp.next = heroNode;
+                heroNode.pre = temp;
+                break;
+            }
+            temp = temp.next;
+        }
     }
 
     //双向链表的修改和单向链表一致,只不过类型发生改变
