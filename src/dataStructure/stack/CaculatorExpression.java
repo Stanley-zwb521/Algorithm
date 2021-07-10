@@ -178,6 +178,13 @@ class ArrayStack2 {
         return value == '+' || value == '-' || value == '*' || value == '/';
     }
 
+    /**
+     * 根据操作符进行计算,注意减法和除法的方向性问题
+     * @param num1
+     * @param num2
+     * @param oper
+     * @return
+     */
     public int cal(int num1, int num2, int oper) {
         int res = 0;
         switch (oper) {
