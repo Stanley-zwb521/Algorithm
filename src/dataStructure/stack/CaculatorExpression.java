@@ -3,7 +3,7 @@ package dataStructure.stack;
 public class CaculatorExpression {
     public static void main(String[] args) {
         //根据思路完成表达式的运算
-        String expression = "7+2*6-4";
+        String expression = "716+2*6-40";
         //创建两个栈，数栈和符号栈
         ArrayStack2 numStack = new ArrayStack2(10);
         ArrayStack2 operStack = new ArrayStack2(10);
@@ -14,6 +14,7 @@ public class CaculatorExpression {
         int oper = 0;
         int res = 0;
         char ch = ' ';
+        String keepNum = "";
         while (true) {
             //依次得到expression中的每一个字符
             ch = expression.substring(index, index + 1).charAt(0);
@@ -40,8 +41,24 @@ public class CaculatorExpression {
                     operStack.push(ch);
                 }
             } else {
-                //如果我们发现是一个数字,就直接入数栈
-                numStack.push(ch - 48);//涉及到ASCII,'1'=>1,相差48
+                //如果我们发现是一个数字,就直接入数栈(该方法只支持个位数运算,当处理多位数的时候就不能直接入数栈了)
+                //numStack.push(ch - 48);//涉及到ASCII,'1'=>1,相差48
+
+                //处理多位数运算思路:
+                //如果我们发现是一个数字的话,不能直接将数字入栈,要先向下试探下一位是否为操作符,
+                //如果下一位为数字,要进行字符串拼接操作,
+                //如果下一位为操作符,才可将拼接好的字符串强制转换成Integer类型,并入栈
+                keepNum += ch;
+                //当ch扫描到最后一位数字时,不需要判断多位数,直接入数栈,不加该条件处理将存在数组越界错误
+                if (index == expression.length() - 1) {
+                    numStack.push(Integer.parseInt(keepNum));
+                } else {
+                    if (operStack.isOper(expression.substring(index + 1, index + 2).charAt(0))) {
+                        numStack.push(Integer.parseInt(keepNum));
+                        keepNum = "";//非常重要,入数栈后一定要将keepNum清空,防止影响下次操作
+                    }
+                }
+
             }
             //让index+1,并判断是否扫描到expression尾部
             index++;
@@ -180,6 +197,7 @@ class ArrayStack2 {
 
     /**
      * 根据操作符进行计算,注意减法和除法的方向性问题
+     *
      * @param num1
      * @param num2
      * @param oper
