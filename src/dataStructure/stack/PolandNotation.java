@@ -72,5 +72,3 @@ public class PolandNotation {
         return Integer.parseInt(stack.pop());
     }
 }
-
-
