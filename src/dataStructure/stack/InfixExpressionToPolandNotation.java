@@ -6,6 +6,7 @@ import java.util.Stack;
 
 public class InfixExpressionToPolandNotation {
     /*
+    中缀表达式转后缀表达式思路:
     1.初始化两个栈:运算符栈s1和存储中间结果的栈s2
     2.从左至右扫描中缀表达式
     3.遇到数字时将其压入s2
@@ -21,14 +22,19 @@ public class InfixExpressionToPolandNotation {
     8.依次弹出s2中的元素并输出,结果的逆序输出即为中缀表达式对应的后缀表达式(逆波兰表达式)
      */
     public static void main(String[] args) {
-
         //完成将中缀表达式转换成后缀表达式的功能
         //1. 1+((2+3)*4)-5 => 1 2 3 + 4 * + 5 -
         //2.因为直接对string进行扫描操作,不方便,因此先将"1+((2+3)*4)-5" => 中缀表达式对应的list
         //  即"1+((2+3)*4)-5" => ArrayList[1, +, (, (, 2, +, 3, ), *, 4, ), -, 5]
+        //3.将得到的中缀表达式对应的list => 后缀表达式对应的list
+        // 即 ArrayList[1, +, (, (, 2, +, 3, ), *, 4, ), -, 5] => ArrayList[1, 2, 3, +, 4, *, +, 5, -]
         String expression = "1+((2+3)*4)-5";
         List<String> infixExpressionList = toInfixExpressionList(expression);
-        System.out.println("infixExpressionList=" + infixExpressionList);
+        System.out.println("中缀表达式对应的list=" + infixExpressionList);
+        List<String> parseSuffixExpressionList = parseSuffixExpression(infixExpressionList);
+        System.out.println("后缀表达式对应的list=" + parseSuffixExpressionList);
+        //调用caculate方法使用后缀表达式计算结果
+        System.out.println("expression=" + calculate(parseSuffixExpressionList));
 
 //        //先定义一个逆波兰表达式
 //        //(3+4)*5-6 => 3 4 + 5 * 6 - =29
@@ -42,6 +48,45 @@ public class InfixExpressionToPolandNotation {
 //
 //        int res = calculate(rpnList);
 //        System.out.println("计算的结果是=" + res);
+    }
+
+    //方法: 将得到的中缀表达式对应的list => 后缀表达式对应的list
+    // 即 ArrayList[1, +, (, (, 2, +, 3, ), *, 4, ), -, 5] => ArrayList[1, 2, 3, +, 4, *, +, 5, -]
+    public static List<String> parseSuffixExpression(List<String> ls) {
+        //定义两个栈
+        Stack<String> s1 = new Stack<String>();//符号栈
+        //说明:因为s2这个栈,在整个转换过程中没有pop操作,而且后面还需要逆序输出
+        //因此比较麻烦,这里就不采用Stack<String>直接使用List<String> s2
+        List<String> s2 = new ArrayList<String>();//存储中间结果栈
+
+        //遍历ls
+        for (String item : ls) {
+            //如果是一个数,假如s2
+            if (item.matches("\\d+")) {
+                s2.add(item);
+            } else if (item.equals("(")) {
+                s1.push(item);
+            } else if (item.equals(")")) {
+                //如果是右括号')',则依次弹出s1栈顶的运算符,并压入s2,遇到左括号为止,此时将这一对括号丢弃
+                while (!s1.peek().equals("(")) {
+                    s2.add(s1.pop());
+                }
+                s1.pop();//将这个小括号弹出s1,消除小括号
+            } else {
+                //当item的优先级小于或者等于s1栈顶运算符的优先级,将s1栈顶的运算符弹出并加入到s2中,再次转到4.1与s1中的新的栈顶运算符相比较
+                //缺少一个比较优先级高地的方法
+                while (s1.size() != 0 && (Operation.getValue(item) <= Operation.getValue(s1.peek()))) {
+                    s2.add(s1.pop());
+                }
+                //还需要将item压入栈
+                s1.push(item);
+            }
+        }
+        //将s1中剩余的运算符一次弹出并压入s2中
+        while (s1.size() != 0) {
+            s2.add(s1.pop());
+        }
+        return s2;//因为是存放在list中,因此按顺序输出就是对应的后缀表达式对应的list
     }
 
     //方法: 将中缀表达式转成对应的list
@@ -117,5 +162,35 @@ public class InfixExpressionToPolandNotation {
         }
         //最后留在stack中的数据是运算结果
         return Integer.parseInt(stack.pop());
+    }
+}
+
+//编写一个类Operation 可以返回一个运算符对应的优先级
+class Operation {
+    private static int ADD = 1;
+    private static int SUB = 1;
+    private static int MUL = 2;
+    private static int DIV = 2;
+
+    //写一个方法,返回对应的优先级数字
+    public static int getValue(String operation) {
+        int result = 0;
+        switch (operation) {
+            case "+":
+                result = ADD;
+                break;
+            case "-":
+                result = SUB;
+                break;
+            case "*":
+                result = MUL;
+                break;
+            case "/":
+                result = DIV;
+                break;
+            default:
+                System.out.println("不存在该运算符");
+        }
+        return result;
     }
 }
