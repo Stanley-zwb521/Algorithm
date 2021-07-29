@@ -31,11 +31,14 @@ public class InsertionSort {
     }
 
     public static void insertSort(int[] arr) {
+        //变量定义放到循环外节省栈内存开销
+        int insertVal = 0;
+        int insertIndex = 0;
         //使用for循环来将代码简化
         for (int i = 1; i < arr.length; i++) {
             //定义待插入的数
-            int insertVal = arr[i];
-            int insertIndex = i - 1;//即arr[1]的前面这个数的下标
+            insertVal = arr[i];
+            insertIndex = i - 1;//即arr[1]的前面这个数的下标
 
             //给insertVal找到插入的位置
             //说明:
