@@ -11,6 +11,7 @@ public class InsertValueSearch {
     2.将二分查找中的求mid索引的公式进行改进:
     int mid =（left+right)/2 = left+(right-left)/2 改成
     int mid = left + (right - left) * (findVal - arr[left]) / (arr[right] - arr[left]);
+    在改写的过程中只是将1/2系数进行了改写和替换
      */
     /*
     插值查找注意事项:
