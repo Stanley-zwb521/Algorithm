@@ -63,7 +63,7 @@ public class FibonacciSearch {
         int mid = 0;//存放mid值
         int f[] = fib();//获取到斐波那契数列
         //获取到斐波那契分割数值的下标
-        while (right > f[k] - 1) {
+        while (right > f[k] - 1 - 1) {
             k++;
         }
         //因为f[k]数值可能大于数组的长度,因此我们需要使用Arrays类,构造一个新的数组,并指向temp[]
