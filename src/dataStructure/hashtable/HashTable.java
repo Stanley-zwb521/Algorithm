@@ -186,12 +186,12 @@ class EmpLinkedList {
         boolean flag = false;//是否找到待删除雇员节点
         Emp curEmp = head;
         while (true) {
-            if (curEmp.next == null) {
-                break;
-            }
             if (head.id == id) {//head即为需要删除的雇员
                 head = head.next;
                 flag = true;
+                break;
+            }
+            if (curEmp.next == null) {
                 break;
             }
             if (curEmp.next.id == id) {//找到了需要删除的雇员
