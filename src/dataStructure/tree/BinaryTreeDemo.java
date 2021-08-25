@@ -57,6 +57,36 @@ public class BinaryTreeDemo {
         //后序遍历
         System.out.println("后序遍历:");
         binaryTree.postOrder();//2,5,4,3,1
+        //前序遍历查找
+        System.out.println("前序遍历查找:");
+        HeroNode resNode = binaryTree.preOrderSearch(5);
+        if (resNode != null) {
+            System.out.printf("找到了节点信息为no=%d name=%s\n", resNode.getNo(), resNode.getName());
+        } else {
+            System.out.println("没有找到该节点信息");
+        }
+        //中序遍历查找
+        System.out.println("中序遍历查找:");
+        resNode = binaryTree.infixOrderSearch(5);
+        if (resNode != null) {
+            System.out.printf("找到了节点信息为no=%d name=%s\n", resNode.getNo(), resNode.getName());
+        } else {
+            System.out.println("没有找到该节点信息");
+        }
+        //后序遍历查找
+        System.out.println("后序遍历查找:");
+        resNode = binaryTree.postOrderSearch(5);
+        if (resNode != null) {
+            System.out.printf("找到了节点信息为no=%d name=%s\n", resNode.getNo(), resNode.getName());
+        } else {
+            System.out.println("没有找到该节点信息");
+        }
+        //测试删除节点
+        System.out.println("删除前,前序遍历:");
+        binaryTree.preOrder();
+        System.out.println("删除后,前序遍历:");
+        binaryTree.delNode(5);
+        binaryTree.preOrder();
     }
 }
 
@@ -92,6 +122,47 @@ class BinaryTree {
             this.root.postOrder();
         } else {
             System.out.println("二叉树为空,无法遍历");
+        }
+    }
+
+    //前序遍历查找
+    public HeroNode preOrderSearch(int no) {
+        if (root != null) {
+            return this.root.preOrderSearch(no);
+        } else {
+            return null;
+        }
+    }
+
+    //中序遍历查找
+    public HeroNode infixOrderSearch(int no) {
+        if (root != null) {
+            return this.root.infixOrderSearch(no);
+        } else {
+            return null;
+        }
+    }
+
+    //后序遍历查找
+    public HeroNode postOrderSearch(int no) {
+        if (root != null) {
+            return this.root.postOrderSearch(no);
+        } else {
+            return null;
+        }
+    }
+
+    //删除节点
+    public void delNode(int no) {
+        if (root != null) {
+            //这里需要立即判断root是不是就是待删除节点
+            if (root.getNo() == no) {
+                root = null;
+            } else {
+                this.root.delNode(no);
+            }
+        } else {
+            System.out.println("空树,不能删除~~");
         }
     }
 }
@@ -188,5 +259,130 @@ class HeroNode {
         }
         //输出父节点
         System.out.println(this);
+    }
+
+    /**
+     * 前序遍历查找方法
+     * 1.先判断当前节点的no是否等于要查找的
+     * 2.如果相等则返回当前节点
+     * 3.如果不等则判断当前节点的左子节点是否为空,如果不为空则向左递归前序查找
+     * 4.如果左递归前序查找,找到节点则返回,否则继续判断当前节点的右子节点是否为空,
+     * 如果不为空则向右递归前序查找
+     *
+     * @param no 需要查找的序号
+     * @return 如果找到就返回该Node, 如果没有找到返回null
+     */
+    public HeroNode preOrderSearch(int no) {
+        if (this.no == no) {
+            return this;
+        }
+        HeroNode resNode = null;
+        if (this.left != null) {
+            resNode = this.left.preOrderSearch(no);
+        }
+        if (resNode != null) {//说明左子树找到
+            return resNode;
+        }
+        if (this.right != null) {
+            resNode = this.right.preOrderSearch(no);
+        }
+        return resNode;
+    }
+
+    /**
+     * 中序遍历查找方法
+     * 1.判断当前节点的左子节点是否为空,如果不为空则向左递归中序查找
+     * 2.如果找到则返回,如果没有找到就和当前节点比较,如果是则返回当前节点,
+     * 否则继续向右递归中序查找
+     * 3.如果右递归找到则返回,否则返回null
+     *
+     * @param no 需要查找的序号
+     * @return 如果找到就返回该Node, 如果没有找到返回null
+     */
+    public HeroNode infixOrderSearch(int no) {
+        HeroNode resNode = null;
+        if (this.left != null) {
+            resNode = this.left.infixOrderSearch(no);
+        }
+        if (resNode != null) {
+            return resNode;
+        }
+        if (this.no == no) {
+            return this;
+        }
+        if (this.right != null) {
+            resNode = this.right.infixOrderSearch(no);
+        }
+        return resNode;
+    }
+
+    /**
+     * 后序遍历查找方法
+     * 1.判断当前节点的左子节点是否为空,如果不为空则向左递归后序查找
+     * 2.如果找到则返回,如果没有找到就判断当前节点的右子节点是否为空,如果不为空,
+     * 则右递归进行后序查找,如果找到则返回
+     * 3.如果没有找到和当前节点进行比较,如果是则返回否则返回null
+     *
+     * @param no 需要查找的序号
+     * @return 如果找到就返回该Node, 如果没有找到返回null
+     */
+    public HeroNode postOrderSearch(int no) {
+        HeroNode resNode = null;
+        if (this.left != null) {
+            resNode = this.left.postOrderSearch(no);
+        }
+        if (resNode != null) {
+            return resNode;
+        }
+        if (this.right != null) {
+            resNode = this.right.postOrderSearch(no);
+        }
+        if (resNode != null) {
+            return resNode;
+        }
+        if (this.no == no) {
+            return this;
+        }
+        return null;
+    }
+
+    /**
+     * 删除节点方法
+     * 规定:
+     * 1.如果删除的节点是叶子节点,则删除该节点
+     * 2.如果删除的节点是非叶子节点,则删除该子树
+     * 思路:
+     * 首先先考虑如果树是否为空树,如果不为空树,则判断待删除节点是否为root节点,
+     * 如果就是root节点则等价于将二叉树置空root=null;否则
+     * 1.因为二叉树是单向的,所以我们先判断当前节点的子节点是否需要删除,
+     * 而不能去判断当前节点是不是需要删除的节点
+     * 2.如果当前节点的左子节点不为空,并且左子节点就是要删除节点,就将
+     * this.left=null;并且就返回(结束递归删除)
+     * 3.如果当前节点的右子节点不为空,并且右子节点就是要删除节点,就将
+     * this.right=null;并且就返回(结束递归删除)
+     * 4.如果2和3都没有删除节点,那么就需要向左子树进行递归删除
+     * 5.如果4也没有删除节点,则需要向右子树进行递归删除
+     *
+     * @param no
+     */
+    public void delNode(int no) {
+        //判断左子节点是否为待删除节点
+        if (this.left != null && this.left.no == no) {
+            this.left = null;
+            return;
+        }
+        //判断右子节点是否是待删除节点
+        if (this.right != null && this.right.no == no) {
+            this.right = null;
+            return;
+        }
+        //向左子树递归删除
+        if (this.left != null) {
+            this.left.delNode(no);
+        }
+        //向右子树递归删除
+        if (this.right != null) {
+            this.right.delNode(no);
+        }
     }
 }
