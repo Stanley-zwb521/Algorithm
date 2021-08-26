@@ -1,5 +1,7 @@
 package dataStructure.tree;
 
+import java.util.Arrays;
+
 public class SequentialStorageOfBinaryTree {
     /*
     顺序存储二叉树从数据存储来看,数组存储方式和树的存储方式可以相互转换,
@@ -18,7 +20,14 @@ public class SequentialStorageOfBinaryTree {
     public static void main(String[] args) {
         int[] arr = {1, 2, 3, 4, 5, 6, 7};
         ArrayBinaryTree arrayBinaryTree = new ArrayBinaryTree(arr);
+        System.out.println("顺序存储二叉树前序遍历:");
         arrayBinaryTree.preOrder();//1245367
+        System.out.println();
+        System.out.println("顺序存储二叉树中序遍历:");
+        arrayBinaryTree.infixOrder();//4251637
+        System.out.println();
+        System.out.println("顺序存储二叉树后序遍历:");
+        arrayBinaryTree.postOrder();//4526731
     }
 }
 
@@ -49,12 +58,54 @@ class ArrayBinaryTree {
         if (arr == null || arr.length == 0) {
             System.out.println("数组为空,不能按照二叉树的前序遍历");
         }
-        System.out.println(arr[index]);
+        System.out.printf(arr[index] + "\t");
         if (2 * index + 1 < arr.length) {
             preOrder(2 * index + 1);
         }
         if (2 * index + 2 < arr.length) {
             preOrder(2 * index + 2);
         }
+    }
+
+    /**
+     * 重载infixOrder方法,方便调用
+     */
+    public void infixOrder() {
+        this.infixOrder(0);
+    }
+
+    //顺序存储二叉树的中序遍历
+    public void infixOrder(int index) {
+        if (arr == null || arr.length == 0) {
+            System.out.println("数组为空,不能按照二叉树的前序遍历");
+        }
+        if (2 * index + 1 < arr.length) {
+            infixOrder(2 * index + 1);
+        }
+        System.out.printf(arr[index] + "\t");
+        if (2 * index + 2 < arr.length) {
+            infixOrder(2 * index + 2);
+        }
+    }
+
+    /**
+     * 重载postOrder方法,方便调用
+     */
+    public void postOrder() {
+        this.postOrder(0);
+    }
+
+    //顺序存储二叉树的后序遍历
+    public void postOrder(int index) {
+        if (arr == null || arr.length == 0) {
+            System.out.println("数组为空,不能按照二叉树的前序遍历");
+        }
+        if (2 * index + 1 < arr.length) {
+            postOrder(2 * index + 1);
+        }
+        if (2 * index + 2 < arr.length) {
+            postOrder(2 * index + 2);
+        }
+        System.out.printf(arr[index] + "\t");
     }
 }
