@@ -23,12 +23,56 @@ public class HuffmanCode {
         Node huffmanTreeRoot = createHuffmanTree(nodes);
         System.out.println("前序遍历一下:");
         preOrder(huffmanTreeRoot);
+        //测试是否生成了对应的赫夫曼编码
+        //getCode(huffmanTreeRoot,"",stringBuilder);
+        Map<Byte, String> huffmanCodes = getCode(huffmanTreeRoot);
+        System.out.println("生成的赫夫曼编码表" + huffmanCodes);
+    }
+
+    //为了调用方便,重载getCode方法
+    private static Map<Byte, String> getCode(Node root) {
+        if (root == null) {
+            return null;
+        }
+        //处理root的左子树
+        getCode(root.left, "0", stringBuilder);
+        //处理root的右子树
+        getCode(root.right, "1", stringBuilder);
+        return huffmanCodes;
     }
 
     //生成赫夫曼树对应的赫夫曼编码表
     //思路:
     //1.将赫夫曼编码表存放在Map<Byte,String>
-    //2.
+    //形式{32=01, 97=100, 100=11000, 117=11001, 101=1110, 118=11011, 105=101, 121=11010, 106=0010, 107=1111, 108=000, 111=0011}
+    //2.在生成赫夫曼编码表示需要去拼接路径,定义一个StringBuilder存储某个叶子节点的路径
+    static Map<Byte, String> huffmanCodes = new HashMap<Byte, String>();
+    static StringBuilder stringBuilder = new StringBuilder();
+
+    /**
+     * 功能:将传入的node节点的所有叶子节点的赫夫曼编码得到,并放入到huffmanCodes集合中
+     *
+     * @param node          传入节点
+     * @param code          路径:左子节点是0,右子节点是1
+     * @param stringBuilder 用于拼接路径
+     */
+    private static void getCode(Node node, String code, StringBuilder stringBuilder) {
+        StringBuilder stringBuilder2 = new StringBuilder(stringBuilder);
+        stringBuilder2.append(code);
+        if (node != null) {//node==null就不处理
+            //判断当前node是叶子节点还是非叶子节点
+            if (node.data == null) {//非叶子节点
+                //递归处理
+                //向左递归
+                getCode(node.left, "0", stringBuilder2);
+                //向右递归
+                getCode(node.right, "1", stringBuilder2);
+            } else {//说明是一个叶子节点
+                //就表示找到某个叶子结点的最后
+                huffmanCodes.put(node.data, stringBuilder2.toString());
+            }
+        }
+    }
 
     //前序遍历
     public static void preOrder(Node root) {
