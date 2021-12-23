@@ -25,19 +25,69 @@ public class HuffmanCode {
         preOrder(huffmanTreeRoot);
         //测试是否生成了对应的赫夫曼编码
         //getCode(huffmanTreeRoot,"",stringBuilder);
-        Map<Byte, String> huffmanCodes = getCode(huffmanTreeRoot);
+        Map<Byte, String> huffmanCodes = getCodes(huffmanTreeRoot);
         System.out.println("生成的赫夫曼编码表" + huffmanCodes);
+        //测试生成的赫夫曼编码字节数组
+        byte[] huffmanCodeBytes = zip(contentBytes, huffmanCodes);
+        System.out.println("huffmanCodeBytes=" + Arrays.toString(huffmanCodeBytes));//长度仅仅17,远小于40
+        //发送huffmanCodeBytes数组
+    }
+
+    /**
+     * 功能:将字符串对应的byte[]数组,通过生成的赫夫曼编码表,返回一个赫夫曼编码对应压缩后的byte[]数组
+     *
+     * @param bytes        这时原始的字符串对应的byte[]数组
+     * @param huffmanCodes 生成的赫夫曼编码的map
+     * @return 返回赫夫曼编码处理后的byte[]数组
+     * 举例:String content = "i like like like java do you like a java"; => byte[] contentBytes = content.getBytes();
+     * 返回的是 字符串"1010100010111111110010001011111111001000101111111100100101001101110001110000011011101000111100101000101111111100110001001010011011100"
+     * => 对应的byte[] huffmanCodeBytes,即8位对应一个byte,放入到huffmanCodeBytes
+     * huffmanCodeBytes[0] = 10101000(补码) => byte [推导 10101000 => 10101000-1 => 10100111(反码) => 11011000=-88]
+     */
+    private static byte[] zip(byte[] bytes, Map<Byte, String> huffmanCodes) {
+        //1.利用huffmanCodes将bytes转成赫夫曼编码对应的字符串
+        StringBuilder stringBuilder = new StringBuilder();
+        //遍历bytes数组
+        for (byte b : bytes) {
+            stringBuilder.append(huffmanCodes.get(b));
+        }
+        //System.out.println("stringbuilder="+stringBuilder);
+        //将"1010100010111111110..."转成byte[]
+
+        //统计返回 byte[] huffmanCodeBytes的长度
+        //concept2:一句话int len=stringBuilder.length()+7/8
+        int len;
+        if (stringBuilder.length() % 8 == 0) {
+            len = stringBuilder.length() / 8;
+        } else {
+            len = stringBuilder.length() / 8 + 1;
+        }
+        //创建存储压缩后的byte数组
+        byte[] huffmanCodeBytes = new byte[len];
+        int index = 0;//记录第几个byte
+        for (int i = 0; i < stringBuilder.length(); i += 8) {//每8位对应一个byte,所以步长+8
+            String strByte;
+            if (i + 8 > stringBuilder.length()) {//不够8位
+                strByte = stringBuilder.substring(i);
+            } else {
+                strByte = stringBuilder.substring(i, i + 8);
+            }
+            //将strByte转成一个byte放入huffmanCodeBytes中即可
+            huffmanCodeBytes[index] = (byte) Integer.parseInt(strByte, 2);
+            index++;
+        }
+        return huffmanCodeBytes;
     }
 
     //为了调用方便,重载getCode方法
-    private static Map<Byte, String> getCode(Node root) {
+    private static Map<Byte, String> getCodes(Node root) {
         if (root == null) {
             return null;
         }
         //处理root的左子树
-        getCode(root.left, "0", stringBuilder);
+        getCodes(root.left, "0", stringBuilder);
         //处理root的右子树
-        getCode(root.right, "1", stringBuilder);
+        getCodes(root.right, "1", stringBuilder);
         return huffmanCodes;
     }
 
@@ -56,7 +106,7 @@ public class HuffmanCode {
      * @param code          路径:左子节点是0,右子节点是1
      * @param stringBuilder 用于拼接路径
      */
-    private static void getCode(Node node, String code, StringBuilder stringBuilder) {
+    private static void getCodes(Node node, String code, StringBuilder stringBuilder) {
         StringBuilder stringBuilder2 = new StringBuilder(stringBuilder);
         stringBuilder2.append(code);
         if (node != null) {//node==null就不处理
@@ -64,9 +114,9 @@ public class HuffmanCode {
             if (node.data == null) {//非叶子节点
                 //递归处理
                 //向左递归
-                getCode(node.left, "0", stringBuilder2);
+                getCodes(node.left, "0", stringBuilder2);
                 //向右递归
-                getCode(node.right, "1", stringBuilder2);
+                getCodes(node.right, "1", stringBuilder2);
             } else {//说明是一个叶子节点
                 //就表示找到某个叶子结点的最后
                 huffmanCodes.put(node.data, stringBuilder2.toString());
