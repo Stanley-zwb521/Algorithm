@@ -17,8 +17,11 @@ public class HuffmanCode {
         String content = "i like like like java do you like a java";
         byte[] contentBytes = content.getBytes();
         System.out.println(contentBytes.length);//40
+        //压缩过程
         byte[] huffmanCodeBytes = huffmanZip(contentBytes);
         System.out.println("huffmanCodeBytes=" + Arrays.toString(huffmanCodeBytes) + " 长度=" + huffmanCodeBytes.length);//长度仅仅17,远小于40
+        //解压过程
+        System.out.println("str=" + byteToBitString(true,(byte) -1));
         //分步过程
         /*
         List<Node> nodes = getNode(contentBytes);
@@ -37,6 +40,36 @@ public class HuffmanCode {
         //发送huffmanCodeBytes数组
          */
     }
+
+    /*完成数据的解压
+    思路:
+    1.将huffmanCodeBytes=[-88, -65, -56, -65, -56, -65, -55, 77, -57, 6, -24, -14, -117, -4, -60, -90, 28]
+    重写转成赫夫曼编码对应的"10101000101111111100..."
+    2.赫夫曼编码对应的二进制的字符串"10101000101111111100..." => 对照赫夫曼编码 => "i like like like java do you like a java"
+     */
+
+    /**
+     * 将一个byte字节数组转成一个二进制的字符串
+     *
+     * @param flag flag标志位表示是否需要补高位,如果是true表示需要补高位,如果是false表示不需要补高位
+     * @param b    待转变的byte字节数组
+     * @return
+     */
+    private static String byteToBitString(boolean flag, byte b) {
+        //使用变量保存b
+        int temp = b;//将b转成int
+        //如果是正数还需要补高位
+        if (flag) {
+            temp |= 256;//按位与256 1 0000 0000 | 0000 0001 => 1 0000 0001
+        }
+        String str = Integer.toBinaryString(temp);//返回的是temp对应的二进制补码
+        if (flag) {
+            return str.substring(str.length() - 8);
+        } else {
+            return str;
+        }
+    }
+
 
     /**
      * 使用一个方法,将前面的方法封装起来,便于我们的调用
