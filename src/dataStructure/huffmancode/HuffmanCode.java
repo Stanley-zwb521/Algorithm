@@ -1,5 +1,9 @@
 package dataStructure.huffmancode;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.*;
 
 public class HuffmanCode {
@@ -24,6 +28,11 @@ public class HuffmanCode {
         //System.out.println("str=" + byteToBitString(true, (byte) -1));
         byte[] sourceByte = decode(huffmanCodes, huffmanCodeBytes);
         System.out.println("原来的字符串=" + new String(sourceByte));//"i like like like java do you like a java"
+        //测试压缩文件
+        String srcFile = "c://src.bmp";
+        String dstFile = "c://dst.zip";
+        zipFile(srcFile, dstFile);
+        System.out.println("压缩文件成功!");
         //分步过程
         /*
         List<Node> nodes = getNode(contentBytes);
@@ -41,6 +50,49 @@ public class HuffmanCode {
         System.out.println("huffmanCodeBytes=" + Arrays.toString(huffmanCodeBytes));//长度仅仅17,远小于40
         //发送huffmanCodeBytes数组
          */
+    }
+
+    /**
+     * 将一个文件进行压缩
+     *
+     * @param srcFile 希望压缩的文件的全路径
+     * @param dstFile 压缩后的文件存放的目录
+     */
+    public static void zipFile(String srcFile, String dstFile) {
+        //创建文件的输入流
+        FileInputStream is = null;
+        ObjectOutputStream oos = null;
+        //创建文件的输出流
+        OutputStream os = null;
+        try {
+            //创建文件的输入流
+            is = new FileInputStream(srcFile);
+            //创建一个和源文件大小一样的byte[]
+            byte[] b = new byte[is.available()];
+            //读取文件
+            is.read();
+            //直接对源文件进行压缩
+            byte[] huffmanBytes = huffmanZip(b);
+            //创建文件的输出流,存放压缩文件
+            os = new FileOutputStream(dstFile);
+            //创建一个和文件输出流关联的ObjectOutputStream
+            oos = new ObjectOutputStream(os);
+            //把赫夫曼编码后的字节数组写入压缩文件
+            oos.writeObject(huffmanBytes);
+            //这里以对象流的方式写入赫夫曼编码,为了以后恢复源文件时使用
+            //注意一定要把赫夫曼编码写入压缩文件
+            oos.writeObject(huffmanCodes);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                is.close();
+                oos.close();
+                os.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     /*完成数据的解压
@@ -80,7 +132,7 @@ public class HuffmanCode {
             Byte b = null;
             while (flag) {
                 //取出一个字符
-                String key = stringBuilder.substring(i, i + count);//i不动,让count移动,直到匹配到一个字节
+                String key = stringBuilder.substring(i, i + count);//i不动,让count移动,直到匹配到map中的value
                 b = map.get(key);
                 if (b == null) {//说明没有匹配到
                     count++;
