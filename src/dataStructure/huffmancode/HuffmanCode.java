@@ -29,8 +29,8 @@ public class HuffmanCode {
         byte[] sourceByte = decode(huffmanCodes, huffmanCodeBytes);
         System.out.println("原来的字符串=" + new String(sourceByte));//"i like like like java do you like a java"
         //测试压缩文件
-        String srcFile = "c://src.bmp";
-        String dstFile = "c://dst.zip";
+        String srcFile = "c://test//src.png";
+        String dstFile = "c://test//dst.zip";
         zipFile(srcFile, dstFile);
         System.out.println("压缩文件成功!");
         //分步过程
@@ -70,7 +70,7 @@ public class HuffmanCode {
             //创建一个和源文件大小一样的byte[]
             byte[] b = new byte[is.available()];
             //读取文件
-            is.read();
+            is.read(b);
             //直接对源文件进行压缩
             byte[] huffmanBytes = huffmanZip(b);
             //创建文件的输出流,存放压缩文件
