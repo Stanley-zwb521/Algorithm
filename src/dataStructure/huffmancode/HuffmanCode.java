@@ -1,9 +1,6 @@
 package dataStructure.huffmancode;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 public class HuffmanCode {
@@ -29,10 +26,15 @@ public class HuffmanCode {
         byte[] sourceByte = decode(huffmanCodes, huffmanCodeBytes);
         System.out.println("原来的字符串=" + new String(sourceByte));//"i like like like java do you like a java"
         //测试压缩文件
-        String srcFile = "c://test//src.png";
-        String dstFile = "c://test//dst.zip";
-        zipFile(srcFile, dstFile);
-        System.out.println("压缩文件成功!");
+//        String srcFile = "c://test//src.png";
+//        String dstFile = "c://test//dst.zip";
+//        zipFile(srcFile, dstFile);
+//        System.out.println("压缩文件成功!");
+        //测试解压文件
+        String zipFile = "c://test//dst.zip";
+        String dstFile = "c://test//src2.png";
+        unZipFile(zipFile, dstFile);
+        System.out.println("解压文件成功!");
         //分步过程
         /*
         List<Node> nodes = getNode(contentBytes);
@@ -50,6 +52,47 @@ public class HuffmanCode {
         System.out.println("huffmanCodeBytes=" + Arrays.toString(huffmanCodeBytes));//长度仅仅17,远小于40
         //发送huffmanCodeBytes数组
          */
+    }
+
+    /**
+     * 将一个文件进行解压
+     *
+     * @param zipFile 准备解压的文件
+     * @param dstFile 解压后生成的文件的存储路径
+     */
+    public static void unZipFile(String zipFile, String dstFile) {
+        //定义一个文件输入流
+        FileInputStream is = null;
+        //定义一个对象输入流
+        ObjectInputStream ois = null;
+        //定义一个文件输出流
+        OutputStream os = null;
+        try {
+            //创建一个文件输入流
+            is = new FileInputStream(zipFile);
+            //创建一个和is相关联的对象文件流
+            ois = new ObjectInputStream(is);
+            //读取byte[] huffmanBytes
+            byte[] huffmanBytes = (byte[]) ois.readObject();
+            //读取赫夫曼编码表
+            Map<Byte, String> huffmanCodes = (Map<Byte, String>) ois.readObject();
+            //解码
+            byte[] bytes = decode(huffmanCodes, huffmanBytes);
+            //将bytes数组输出到目标文件中
+            os = new FileOutputStream(dstFile);
+            //写数据到文件中
+            os.write(bytes);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                os.close();
+                ois.close();
+                is.close();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     /**
