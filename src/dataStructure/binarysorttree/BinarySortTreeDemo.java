@@ -23,7 +23,14 @@ public class BinarySortTreeDemo {
         //第二种情况
         //binarySortTree.delNode(1);
         //第三种情况
+        binarySortTree.delNode(2);
+        binarySortTree.delNode(7);
+        binarySortTree.delNode(9);
+        binarySortTree.delNode(3);
+        binarySortTree.delNode(5);
+        binarySortTree.delNode(12);
         binarySortTree.delNode(10);
+        binarySortTree.delNode(1);
         System.out.println("删除节点后:");
         binarySortTree.infixOrder();
     }
@@ -119,7 +126,7 @@ class BinarySortTree {
      * 删除有两颗子树的节点(比如:7,3,10)
      * 1.需要先找到要删除的节点 targetNode
      * 2.找到targetNode的父节点 parent
-     * 3.从targetNode的右子树找到最小的节点
+     * 3.从targetNode的右子树找到最小的节点(也可以查找左子树最大的节点)
      * 4.用一个临时变量将最小节点的值保存temp=11
      * 5.删除该最小节点
      * 6.targetNode.value=temp;
@@ -157,18 +164,26 @@ class BinarySortTree {
             } else {//第二种情况,删除子树中只带有一个叶子节点的父节点
                 //如果要删除的targetNode有左子节点
                 if (targetNode.left != null) {
-                    //如果targetNode是parent的左子节点
-                    if (parent.left.value == value) {
-                        parent.left = targetNode.left;
-                    } else {//targetNode是parent的右子节点
-                        parent.right = targetNode.left;
+                    if (parent != null) {//enhancement为了避免出现只剩下两个节点时删除parent出现空指针异常
+                        //如果targetNode是parent的左子节点
+                        if (parent.left.value == value) {
+                            parent.left = targetNode.left;
+                        } else {//targetNode是parent的右子节点
+                            parent.right = targetNode.left;
+                        }
+                    } else {
+                        root = targetNode.left;
                     }
                 } else {//要删除的targetNode有右子节点
-                    //如果targetNode是parent的左子节点
-                    if (parent.left.value == value) {
-                        parent.left = targetNode.right;
-                    } else {//targetNode是parent的右子节点
-                        parent.right = targetNode.right;
+                    if (parent != null) {//enhancement为了避免出现只剩下两个节点时删除parent出现空指针异常
+                        //如果targetNode是parent的左子节点
+                        if (parent.left.value == value) {
+                            parent.left = targetNode.right;
+                        } else {//targetNode是parent的右子节点
+                            parent.right = targetNode.right;
+                        }
+                    } else {
+                        root = targetNode.right;
                     }
                 }
             }
