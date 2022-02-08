@@ -12,10 +12,10 @@ public class AVLTreeDemo {
         //中序遍历
         System.out.println("中序遍历:");
         avlTree.infixOrder();
-        System.out.println("在没有平衡处理前:");
-        System.out.println("树的高度=" + avlTree.getRoot().height());//4
-        System.out.println("树的左子树的高度=" + avlTree.getRoot().leftHeight());//4
-        System.out.println("树的右子树的高度=" + avlTree.getRoot().rightHeight());//4
+        System.out.println("在平衡处理后:");
+        System.out.println("树的高度=" + avlTree.getRoot().height());
+        System.out.println("树的左子树的高度=" + avlTree.getRoot().leftHeight());
+        System.out.println("树的右子树的高度=" + avlTree.getRoot().rightHeight());
     }
 }
 
@@ -188,6 +188,35 @@ class Node {
         this.value = value;
     }
 
+    /**
+     * 左旋转方法:
+     * 1.创建一个新的节点newNode,值等于当前根节点的数值
+     * 2.将新节点的左子树设置成当前节点(根节点)的左子树
+     * newNode.left=left;
+     * 3.将新节点的右子树设置成当前节点(根节点)的右子树的左子树
+     * newNode.right=right.left;
+     * 4.将当前节点(根节点)的值改成当前节点(根节点)的右子节点的数值
+     * value=right.value;
+     * 5.将当前节点(根节点)的右子树设置成右子树的右子树
+     * right=right.right;
+     * 6.将当前节点(根节点)的左子树设置为新节点
+     * left=newNode;
+     */
+    private void leftRotate() {
+        //1.创建一个新的节点newNode,值等于当前根节点的数值
+        Node newNode = new Node(value);
+        //2.将新节点的左子树设置成当前节点的左子树
+        newNode.left = left;
+        //3.将新节点的右子树设置成当前节点的右子树的左子树
+        newNode.right = right.left;
+        //4.将当前节点的值改成当前节点的右子节点的数值
+        value = right.value;
+        //5.将当前节点的右子树设置成右子树的右子树
+        right = right.right;
+        //6.将当前节点的左子树设置为新节点
+        left = newNode;
+    }
+
     //返回左子树的高度
     public int leftHeight() {
         if (left == null) {
@@ -231,6 +260,10 @@ class Node {
                 //递归向右子树添加
                 this.right.add(node);
             }
+        }
+        //当添加完一个节点后,如果:右子树的高度-左子树的高度 > 1,左旋转
+        if (rightHeight() - leftHeight() > 1) {
+            leftRotate();
         }
     }
 
