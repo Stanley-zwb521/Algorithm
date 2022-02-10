@@ -2,7 +2,8 @@ package dataStructure.avltree;
 
 public class AVLTreeDemo {
     public static void main(String[] args) {
-        int[] arr = {4, 3, 6, 5, 7, 8};
+        //int[] arr = {4, 3, 6, 5, 7, 8};
+        int[] arr = {10, 12, 8, 9, 7, 6};
         //创建一个AVLTree对象
         AVLTree avlTree = new AVLTree();
         //添加节点
@@ -16,6 +17,7 @@ public class AVLTreeDemo {
         System.out.println("树的高度=" + avlTree.getRoot().height());
         System.out.println("树的左子树的高度=" + avlTree.getRoot().leftHeight());
         System.out.println("树的右子树的高度=" + avlTree.getRoot().rightHeight());
+        System.out.println("当前的根节点=" + avlTree.getRoot());
     }
 }
 
@@ -217,6 +219,35 @@ class Node {
         left = newNode;
     }
 
+    /**
+     * 右旋转方法:
+     * 1.创建一个新的节点newNode,值等于当前根节点的数值
+     * 2.将新节点的右子树设置成当前节点的右子树
+     * newNode.right=right;
+     * 3.将新节点的左子树设置成当前节点的左子树的右子树
+     * newNode.left=left.right;
+     * 4.将当前节点的值改成当前节点的左子节点的数值
+     * value=left.value;
+     * 5.将当前节点的左子树设置成左子树的左子树
+     * left=left.left;
+     * 6.将当前节点的右子树设置为新节点
+     * right=newNode;
+     */
+    private void rightRotate() {
+        //1.创建一个新的节点newNode,值等于当前根节点的数值
+        Node newNode = new Node(value);
+        //2.将新节点的右子树设置成当前节点的右子树
+        newNode.right = right;
+        //3.将新节点的左子树设置成当前节点的左子树的右子树
+        newNode.left = left.right;
+        //4.将当前节点的值改成当前节点的左子节点的数值
+        value = left.value;
+        //5.将当前节点的左子树设置成左子树的左子树
+        left = left.left;
+        //6.将当前节点的右子树设置为新节点
+        right = newNode;
+    }
+
     //返回左子树的高度
     public int leftHeight() {
         if (left == null) {
@@ -264,6 +295,10 @@ class Node {
         //当添加完一个节点后,如果:右子树的高度-左子树的高度 > 1,左旋转
         if (rightHeight() - leftHeight() > 1) {
             leftRotate();
+        }
+        //当添加完一个节点后,如果:左子树的高度-右子树的高度 > 1,右旋转
+        if (leftHeight() - rightHeight() > 1) {
+            rightRotate();
         }
     }
 
