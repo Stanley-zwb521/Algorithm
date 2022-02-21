@@ -2,8 +2,9 @@ package dataStructure.avltree;
 
 public class AVLTreeDemo {
     public static void main(String[] args) {
-        //int[] arr = {4, 3, 6, 5, 7, 8};
-        int[] arr = {10, 12, 8, 9, 7, 6};
+        //int[] arr = {4, 3, 6, 5, 7, 8};//测试左旋转数据
+        //int[] arr = {10, 12, 8, 9, 7, 6};//测试右旋转数据
+        int[] arr = {10, 11, 7, 6, 8, 9};//测试双旋转数据
         //创建一个AVLTree对象
         AVLTree avlTree = new AVLTree();
         //添加节点
@@ -18,6 +19,8 @@ public class AVLTreeDemo {
         System.out.println("树的左子树的高度=" + avlTree.getRoot().leftHeight());
         System.out.println("树的右子树的高度=" + avlTree.getRoot().rightHeight());
         System.out.println("当前的根节点=" + avlTree.getRoot());
+        System.out.println("根节点的左子节点=" + avlTree.getRoot().left);
+        System.out.println("根节点的右子节点=" + avlTree.getRoot().right);
     }
 }
 
@@ -294,11 +297,24 @@ class Node {
         }
         //当添加完一个节点后,如果:右子树的高度-左子树的高度 > 1,左旋转
         if (rightHeight() - leftHeight() > 1) {
-            leftRotate();
+            //如果当前节点的右子节点的左子树高度大于当前节点的右子节点的右子树高度
+            if (right != null && right.leftHeight() > right.rightHeight()) {
+                right.rightRotate();//先对当前节点的右子节点(右子树)进行右旋转操作
+                leftRotate();//再对当前节点进行左旋转操作
+            } else {
+                leftRotate();//直接进行左旋转即可
+            }
+            return;//必须要!!!防止进入其他的条件导致平衡破坏
         }
         //当添加完一个节点后,如果:左子树的高度-右子树的高度 > 1,右旋转
         if (leftHeight() - rightHeight() > 1) {
-            rightRotate();
+            //如果当前节点的左子节点的右子树高度大于当前节点的左子节点的左子树
+            if (left != null && left.rightHeight() > left.leftHeight()) {
+                left.leftRotate();//先对当前节点的左子节点(左子树)进行左旋转操作
+                rightRotate();//再对当前节点进行右旋转操作
+            } else {
+                rightRotate();//直接进行右旋转操作即可
+            }
         }
     }
 
