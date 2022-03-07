@@ -88,7 +88,7 @@ public class Map {
     //i 第一次就是0
     public void depthFirstSearch(boolean[] isVisited, int i) {
         //首先访问该节点并输出
-        System.out.printf(getValueByIndex(i) + "->");
+        System.out.print(getValueByIndex(i) + "->");
         //将该节点设置为已访问
         isVisited[i] = true;
         //查找节点v的第一个邻接节点w
