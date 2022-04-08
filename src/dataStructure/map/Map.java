@@ -47,8 +47,9 @@ public class Map {
 
     public static void main(String[] args) {
         //测试图的创建
-        int n = 5;//顶点的个数
-        String vertexValue[] = {"A", "B", "C", "D", "E"};
+        int n = 8;//顶点的个数
+        //String vertexValue[] = {"A", "B", "C", "D", "E"};
+        String vertexValue[] = {"1", "2", "3", "4", "5", "6", "7", "8"};
         //创建图对象
         Map map = new Map(n);
         //循环添加顶点
@@ -56,21 +57,30 @@ public class Map {
             map.insertVertex(vertex);
         }
         //添加边(A-B,A-C,B-C,B-D,B-E)
-        map.insertEdge(0, 1, 1);//A-B
-        map.insertEdge(0, 2, 1);//A-C
-        map.insertEdge(1, 2, 1);//B-C
-        map.insertEdge(1, 3, 1);//B-D
-        map.insertEdge(1, 4, 1);//B-E
+//        map.insertEdge(0, 1, 1);//A-B
+//        map.insertEdge(0, 2, 1);//A-C
+//        map.insertEdge(1, 2, 1);//B-C
+//        map.insertEdge(1, 3, 1);//B-D
+//        map.insertEdge(1, 4, 1);//B-E
+        //添加边(1-2,1-3,2-4,2-5,4-8,5-8,3-6,3-7,6-7)
+        map.insertEdge(0, 1, 1);//1-2
+        map.insertEdge(0, 2, 1);//1-3
+        map.insertEdge(1, 3, 1);//2-4
+        map.insertEdge(1, 4, 1);//2-5
+        map.insertEdge(3, 7, 1);//4-8
+        map.insertEdge(4, 7, 1);//5-8
+        map.insertEdge(2, 5, 1);//3-6
+        map.insertEdge(2, 6, 1);//3-7
+        map.insertEdge(5, 6, 1);//6-7
         //显示邻接矩阵
         map.showMap();
-        //由于isVisited的初始化放在了对象构造器中所以深度和广度暂时运行一次只能执行其中一个
         //测试深度优先遍历算法
         System.out.println("深度优先遍历算法:");
-        //map.depthFirstSearch();//A->B->C->D->E
+        map.depthFirstSearch();//1->2->4->8->5->3->6->7
         //测试广度优先遍历算法
         System.out.println();
         System.out.println("广度优先遍历算法:");
-        map.broadFirstSearch();//A->B->C->D->E
+        map.broadFirstSearch();//1->2->3->4->5->6->7->8
     }
 
     //构造器
@@ -79,7 +89,6 @@ public class Map {
         edges = new int[n][n];
         vertexList = new ArrayList<String>(n);
         numOfEdges = 0;
-        isVisited = new boolean[n];
     }
 
     /**
@@ -127,6 +136,7 @@ public class Map {
 
     //对depthFirstSearch进行一个重载,遍历所有的节点,并进行dfs
     public void depthFirstSearch() {
+        isVisited = new boolean[vertexList.size()];
         //遍历所有的节点进行dfs[回溯]
         for (int i = 0; i < getNumOfVertex(); i++) {
             if (!isVisited[i]) {
@@ -168,6 +178,7 @@ public class Map {
 
     //遍历所有的节点,都进行广度优先搜索
     public void broadFirstSearch() {
+        isVisited = new boolean[vertexList.size()];
         for (int i = 0; i < getNumOfVertex(); i++) {
             if (!isVisited[i]) {
                 broadFirstSearch(isVisited, i);
