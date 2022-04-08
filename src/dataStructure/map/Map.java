@@ -2,6 +2,7 @@ package dataStructure.map;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Map {
     //图是一种数据结构,其中节点可以具有零个或者多个相邻元素。两个节点之前的连接称为边。节点也可以成为顶点
@@ -20,6 +21,23 @@ public class Map {
     3.若w存在则继续执行4,如果w不存在则回到第1步,将从v的下一个节点继续
     4.若w未被访问,对w进行深度优先遍历递归(即把w当作另一个v,然后进行步骤123)
     5.若w被访问过,查找节点v的w邻接节点的下一个邻接节点,转到步骤3
+     */
+    /*
+    图的广度优先搜索(Broad First Search)
+    类似于一个分层搜索的过程,广度优先遍历需要使用一个队列以保持访问过的节点的顺序,以便按这个顺序来访问这些
+    节点的邻接节点。
+     */
+    /*
+    广度优先遍历算法步骤:
+    1.访问初始节点v并标记节点v为已访问
+    2.节点v入队列
+    3.当队列非空时,继续执行,否则针对v节点的算法结束
+    4.出队列,取得队列头节点u
+    5.查找节点u的第一个邻接节点w
+    6.若节点u的邻接节点不存在,则转到步骤3;否则循环执行以下三个步骤:
+    6.1若节点尚未被访问,则访问节点w并标记为已访问
+    6.2节点w入队列
+    6.3查找节点u的w的下一个邻接节点w,转到步骤6
      */
     private ArrayList<String> vertexList;//存储顶点集合
     private int[][] edges;//存储图对应的邻接矩阵
@@ -45,9 +63,14 @@ public class Map {
         map.insertEdge(1, 4, 1);//B-E
         //显示邻接矩阵
         map.showMap();
+        //由于isVisited的初始化放在了对象构造器中所以深度和广度暂时运行一次只能执行其中一个
         //测试深度优先遍历算法
         System.out.println("深度优先遍历算法:");
-        map.depthFirstSearch();//A->B->C->D->E
+        //map.depthFirstSearch();//A->B->C->D->E
+        //测试广度优先遍历算法
+        System.out.println();
+        System.out.println("广度优先遍历算法:");
+        map.broadFirstSearch();//A->B->C->D->E
     }
 
     //构造器
@@ -86,7 +109,7 @@ public class Map {
 
     //深度优先遍历算法
     //i 第一次就是0
-    public void depthFirstSearch(boolean[] isVisited, int i) {
+    private void depthFirstSearch(boolean[] isVisited, int i) {
         //首先访问该节点并输出
         System.out.print(getValueByIndex(i) + "->");
         //将该节点设置为已访问
@@ -103,11 +126,51 @@ public class Map {
     }
 
     //对depthFirstSearch进行一个重载,遍历所有的节点,并进行dfs
-    private void depthFirstSearch() {
+    public void depthFirstSearch() {
         //遍历所有的节点进行dfs[回溯]
         for (int i = 0; i < getNumOfVertex(); i++) {
             if (!isVisited[i]) {
                 depthFirstSearch(isVisited, i);
+            }
+        }
+    }
+
+    //对一个节点进行广度优先遍历的方法
+    private void broadFirstSearch(boolean[] isVisited, int i) {
+        int u;//表示队列的头节点对应下标
+        int w;//表示邻接节点w
+        LinkedList queue = new LinkedList();//队列,记录节点访问的顺序
+        //访问节点,输出节点信息
+        System.out.print(getValueByIndex(i) + "->");
+        //标记为已访问
+        isVisited[i] = true;
+        //将节点加入队列
+        queue.addLast(i);
+        while (!queue.isEmpty()) {
+            //取出队列的头节点下标
+            u = (Integer) queue.removeFirst();
+            //得到第一个邻接节点的下标w
+            w = getFirstNeighbor(u);
+            while (w != -1) {//说明有邻接节点
+                //是否访问过
+                if (!isVisited[w]) {
+                    System.out.print(getValueByIndex(w) + "->");
+                    //标记已经访问
+                    isVisited[w] = true;
+                    //入队列
+                    queue.addLast(w);
+                }
+                //如果已访问,查找节点u的w的下一个邻接节点w
+                w = getNextNeighbor(u, w);//体现出广度优先
+            }
+        }
+    }
+
+    //遍历所有的节点,都进行广度优先搜索
+    public void broadFirstSearch() {
+        for (int i = 0; i < getNumOfVertex(); i++) {
+            if (!isVisited[i]) {
+                broadFirstSearch(isVisited, i);
             }
         }
     }
